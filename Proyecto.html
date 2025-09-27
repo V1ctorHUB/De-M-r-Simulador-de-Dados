@@ -12,6 +12,9 @@
 <body>
 
     <!-- Landing / Pantalla de selección -->
+    <!-- Botón oculto a Ajustes -->
+    <button id="btnHiddenSettings" class="secret-btn" aria-label="Ajustes"></button>
+
     <section id="landing" class="landing">
         <div class="landing-inner">
             <h1 class="brand">De Méré</h1>
@@ -41,11 +44,10 @@
             <div class="controls">
                 <button id="btnBack" class="btn" title="Volver a elegir modalidad">← Volver</button>
                 <button id="btnRun" class="btn">Simular</button>
-                <button id="btnCsv" class="btn" title="Exportar CSV de las corridas guardadas">Exportar CSV</button>
-                <button id="btnClear" class="btn" title="Borrar histórico local">Borrar histórico</button>
                 <span id="status" aria-live="polite"></span>
             </div>
         </div>
+
 
         <div class="row" style="margin-top:16px">
             <div class="col card">
@@ -64,6 +66,19 @@
         </div>
     </div>
 
+    <!-- Pantalla de Ajustes -->
+    <section id="settings" class="settings hide">
+        <div class="settings-inner">
+            <h2>Ajustes</h2>
+            <p class="muted">Opciones avanzadas</p>
+            <div class="settings-actions">
+                <button id="btnCsv" class="btn">Exportar CSV</button>
+                <button id="btnClear" class="btn">Borrar histórico</button>
+            </div>
+            <button id="btnSettingsBack" class="btn" style="margin-top:16px">← Volver</button>
+            <div id="settingsInfo" class="muted" style="margin-top:8px"></div>
+        </div>
+    </section>
 
 </body>
 

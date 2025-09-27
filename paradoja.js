@@ -1,39 +1,49 @@
-// === utilidades ===
+// =====================
+// paradoja.js (completo)
+// =====================
+
+// Utilidades
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const pick = (n) => Math.floor(Math.random() * n);
 
-// === probabilidades teóricas ===
+// Probabilidades teóricas
 const THEORETICAL = {
     one_die: 1 - Math.pow(5 / 6, 4),
     two_dice: 1 - Math.pow(35 / 36, 24)
 };
 
-// === DOM ===
+// ----- DOM -----
 const landing = document.getElementById('landing');
 const btnStart = document.getElementById('btnStart');
 const modeCards = document.querySelectorAll('.mode-card');
+const btnHiddenSettings = document.getElementById('btnHiddenSettings');
 
 const appWrap = document.querySelector('.wrap');
 const diceZone = document.getElementById('diceZone');
 const rollsOut = document.getElementById('rollsOut');
 const kpis = document.getElementById('kpis');
 const btnRun = document.getElementById('btnRun');
-const btnCsv = document.getElementById('btnCsv');
-const btnClear = document.getElementById('btnClear');
 const btnBack = document.getElementById('btnBack');
 const statusEl = document.getElementById('status');
 
-// === estado de modo seleccionado (solo desde landing) ===
-let selectedMode = 'one_die';
+// Ajustes
+const settings = document.getElementById('settings');
+const btnSettingsBack = document.getElementById('btnSettingsBack');
+const btnCsv = document.getElementById('btnCsv');
+const btnClear = document.getElementById('btnClear');
+const settingsInfo = document.getElementById('settingsInfo');
 
-// === setStatus tolerante ===
+// Estado
+let selectedMode = 'one_die'; // 'one_die' | 'two_dice'
+
+// setStatus tolerante
 function setStatus(msg) {
     if (statusEl) statusEl.textContent = msg || '';
 }
 
-// === persistencia local ===
+// ----- Persistencia local -----
 const STORAGE_KEY = 'demere_runs_v1';
-const runs = [];
+const runs = []; // {trial_id, game, timestamp, n_lanzamientos, exitos, ocurrio, detalles_json}
 
 function loadRuns() {
     try {
@@ -50,9 +60,8 @@ function loadRuns() {
 }
 
 function saveRuns() {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(runs));
-    } catch (e) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(runs)); }
+    catch (e) {
         console.warn('No se pudo guardar histórico:', e);
         setStatus('⚠️ No se pudo guardar en localStorage.');
     }
@@ -73,7 +82,7 @@ function appendRun(result) {
     saveRuns();
 }
 
-// === CSV ===
+// ----- CSV -----
 function toCSV(rows) {
     const header = ['trial_id', 'game', 'timestamp', 'n_lanzamientos', 'exitos', 'ocurrio', 'detalles_json'];
     const body = rows.map(r => [
@@ -91,7 +100,7 @@ function downloadCSV(filename, csvText) {
     document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-// === simulaciones ===
+// ----- Simulaciones -----
 function simularJuegoUno() {
     const lanzamientos = 4, tiradas = []; let exitos = 0;
     for (let i = 0; i < lanzamientos; i++) {
@@ -112,7 +121,7 @@ function simularJuegoDos() {
     return { game: 'two_dice', n_lanzamientos: lanzamientos, tiradas, exitos, ocurrio: (exitos > 0) };
 }
 
-// === dados (DOM) ===
+// ----- Dados (DOM) -----
 function makeDie() {
     const die = document.createElement('div'); die.className = 'die';
     const p = document.createElement('div'); p.className = 'pips';
@@ -132,7 +141,7 @@ async function animateToValue(die, finalValue, duration = 520) {
     renderFace(die, finalValue); await sleep(60); die.el.classList.remove('anim');
 }
 
-// === UI ===
+// ----- UI de juego -----
 function renderKPIs(result) {
     const teor = THEORETICAL[result.game];
     const etiqueta = result.ocurrio ? `<span class="tag ok">¡Ocurrió al menos uno!</span>` : `<span class="tag bad">No ocurrió</span>`;
@@ -154,7 +163,7 @@ async function runOnce() {
     btnRun.disabled = true; setStatus('Rodando dados…');
     rollsOut.textContent = ''; kpis.innerHTML = ''; diceZone.innerHTML = '';
 
-    const mode = selectedMode; // ya no leemos radios
+    const mode = selectedMode;
     const result = (mode === 'one_die') ? simularJuegoUno() : simularJuegoDos();
 
     if (mode === 'one_die') {
@@ -187,19 +196,26 @@ async function runOnce() {
     btnRun.disabled = false;
 }
 
-// === landing: selección de modo y navegación ===
+// ----- Navegación entre pantallas -----
 function showLanding() {
     landing.classList.remove('hide');
-    appWrap.classList.remove('show');
     appWrap.classList.add('hidden');
+    appWrap.classList.remove('show');
+    settings.classList.add('hide');
 }
 function showApp() {
     landing.classList.add('hide');
     appWrap.classList.remove('hidden');
     appWrap.classList.add('show');
+    settings.classList.add('hide');
+}
+function showSettings() {
+    settings.classList.remove('hide');
+    // Info de ayuda
+    if (settingsInfo) settingsInfo.textContent = `Corridas guardadas: ${runs.length}`;
 }
 
-// selección de tarjetas
+// Selección de tarjetas de modo
 modeCards.forEach(card => {
     card.addEventListener('click', () => {
         modeCards.forEach(c => c.setAttribute('aria-pressed', 'false'));
@@ -208,19 +224,30 @@ modeCards.forEach(card => {
     });
 });
 
-btnStart.addEventListener('click', showApp);
-btnBack.addEventListener('click', showLanding);
+// Listeners de navegación y acciones
+btnStart?.addEventListener('click', showApp);
+btnBack?.addEventListener('click', showLanding);
+btnHiddenSettings?.addEventListener('click', showSettings);
+btnSettingsBack?.addEventListener('click', showLanding);
 
-// acciones
-btnRun.addEventListener('click', () => runOnce());
-btnCsv.addEventListener('click', () => {
+btnRun?.addEventListener('click', () => runOnce());
+
+btnCsv?.addEventListener('click', () => {
     if (!runs.length) { setStatus('No hay corridas guardadas. Ejecuta una simulación.'); return; }
-    const csv = toCSV(runs); downloadCSV('demere_results.csv', csv); setStatus('CSV exportado.');
-});
-btnClear.addEventListener('click', () => {
-    runs.length = 0; saveRuns(); localStorage.removeItem(STORAGE_KEY); setStatus('Histórico borrado.');
+    const csv = toCSV(runs);
+    downloadCSV('demere_results.csv', csv);
+    setStatus('CSV exportado.');
+    if (settingsInfo) settingsInfo.textContent = `Corridas guardadas: ${runs.length}`;
 });
 
-// inicio: mostrar landing, ocultar app, cargar histórico
+btnClear?.addEventListener('click', () => {
+    runs.length = 0;
+    saveRuns();
+    localStorage.removeItem(STORAGE_KEY);
+    setStatus('Histórico borrado.');
+    if (settingsInfo) settingsInfo.textContent = `Corridas guardadas: ${runs.length}`;
+});
+
+// Inicializar: mostrar landing, ocultar app, cargar histórico
 appWrap.classList.add('hidden');
 loadRuns();

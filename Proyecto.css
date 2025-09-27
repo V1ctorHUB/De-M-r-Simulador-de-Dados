@@ -300,3 +300,60 @@ label {
     pointer-events: auto;
     transition: opacity .35s ease;
 }
+
+/* Botón secreto (oculto) en landing */
+.secret-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    opacity: 0.15;
+    cursor: pointer;
+}
+
+.secret-btn:focus {
+    outline: 2px dashed var(--accent);
+    opacity: .6;
+}
+
+/* Pantalla de Ajustes */
+.settings {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(1200px 700px at 20% -10%, #1a245a 0%, #0b1020 40%), #0b1020;
+    z-index: 60;
+    transition: opacity .25s ease;
+    opacity: 1;
+}
+
+.settings.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.settings-inner {
+    background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 16px;
+    padding: 22px;
+    min-width: 320px;
+    text-align: center;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .35);
+}
+
+.settings-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 14px;
+}
