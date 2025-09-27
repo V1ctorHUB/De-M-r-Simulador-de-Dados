@@ -5,232 +5,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>De Méré — Simulador de Dados</title>
-    <style>
-        :root {
-            --bg: #0b1020;
-            --panel: #121934;
-            --ink: #e7ecff;
-            --muted: #9aa6ff;
-            --accent: #8b9dff;
-            --ok: #3ddc97;
-            --bad: #ff6b6b;
-        }
-
-        * {
-            box-sizing: border-box
-        }
-
-        html,
-        body {
-            height: 100%
-        }
-
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-            background: radial-gradient(1200px 700px at 20% -10%, #1a245a 0%, var(--bg) 40%), var(--bg);
-            color: var(--ink)
-        }
-
-        .wrap {
-            max-width: 980px;
-            margin: 40px auto;
-            padding: 0 20px
-        }
-
-        h1 {
-            font-weight: 700;
-            letter-spacing: .3px;
-            margin: 0 0 8px
-        }
-
-        .sub {
-            color: var(--muted);
-            margin: 0 0 20px
-        }
-
-        .card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(255, 255, 255, .01));
-            border: 1px solid rgba(255, 255, 255, .08);
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .25)
-        }
-
-        .row {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap
-        }
-
-        .col {
-            flex: 1 1 320px
-        }
-
-        label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer
-        }
-
-        .controls {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-            flex-wrap: wrap
-        }
-
-        .btn {
-            background: var(--accent);
-            color: #0a0f25;
-            border: 0;
-            padding: 10px 16px;
-            font-weight: 700;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform .06s ease, filter .2s ease
-        }
-
-        .btn:active {
-            transform: translateY(1px)
-        }
-
-        .btn[disabled] {
-            opacity: .6;
-            cursor: not-allowed
-        }
-
-        /* Dice */
-        .dice-lane {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
-            gap: 16px;
-            align-items: start
-        }
-
-        .die {
-            width: 84px;
-            height: 84px;
-            background: #f6f8ff;
-            border-radius: 14px;
-            border: 1px solid rgba(0, 0, 0, .07);
-            box-shadow: inset 0 2px 0 rgba(255, 255, 255, .7), 0 12px 24px rgba(0, 0, 0, .25);
-            position: relative;
-            display: grid;
-            place-items: center
-        }
-
-        .die.anim {
-            animation: wobble .5s ease-out
-        }
-
-        @keyframes wobble {
-            0% {
-                transform: rotate(0) translateY(0)
-            }
-
-            20% {
-                transform: rotate(8deg) translateY(-2px)
-            }
-
-            60% {
-                transform: rotate(-6deg) translateY(1px)
-            }
-
-            100% {
-                transform: rotate(0) translateY(0)
-            }
-        }
-
-        .pips {
-            width: 64px;
-            height: 64px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 6px
-        }
-
-        .pip {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #0f172a;
-            margin: auto;
-            opacity: 0;
-            transform: scale(.6);
-            transition: opacity .12s ease, transform .12s ease
-        }
-
-        .pip.on {
-            opacity: 1;
-            transform: scale(1)
-        }
-
-        .rolls {
-            margin-top: 14px;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-            color: #cfe2ff;
-            font-size: 13px;
-            white-space: pre-wrap
-        }
-
-        .kpis {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px
-        }
-
-        .kpi {
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid rgba(255, 255, 255, .08);
-            border-radius: 12px;
-            padding: 12px
-        }
-
-        .kpi b {
-            display: block;
-            font-size: 20px;
-            margin-top: 6px
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-weight: 700;
-            font-size: 12px
-        }
-
-        .ok {
-            background: rgba(61, 220, 151, .15);
-            color: var(--ok)
-        }
-
-        .bad {
-            background: rgba(255, 107, 107, .15);
-            color: var(--bad)
-        }
-
-        .footer {
-            color: #aab3ff;
-            margin-top: 18px;
-            font-size: 12px;
-            opacity: .9
-        }
-    </style>
+    <link rel="stylesheet" href="Proyecto.css">
+    <script src="paradoja.js" defer></script>
 </head>
 
 <body>
+
+    <!-- Landing / Pantalla de selección -->
+    <section id="landing" class="landing">
+        <div class="landing-inner">
+            <h1 class="brand">De Méré</h1>
+            <p class="tagline">Elige tu modalidad</p>
+
+            <div class="modes">
+                <button class="mode-card" data-mode="one_die" aria-pressed="true">
+                    <div class="mode-title">1 dado</div>
+                    <div class="mode-sub">4 lanzamientos</div>
+                </button>
+                <button class="mode-card" data-mode="two_dice" aria-pressed="false">
+                    <div class="mode-title">2 dados</div>
+                    <div class="mode-sub">24 lanzamientos</div>
+                </button>
+            </div>
+
+            <button id="btnStart" class="btn start">Comenzar</button>
+        </div>
+    </section>
+
+    <!-- Main app -->
     <div class="wrap">
         <h1>Paradoja de De Méré — Simulador</h1>
         <p class="sub">Dos modos: <b>1 dado, 4 lanzamientos</b> y <b>2 dados, 24 lanzamientos</b></p>
 
         <div class="card" role="region" aria-label="Controles">
             <div class="controls">
-                <label><input type="radio" name="game" value="one_die" checked> 1 dado (4 lanzamientos)</label>
-                <label><input type="radio" name="game" value="two_dice"> 2 dados (24 lanzamientos)</label>
+                <button id="btnBack" class="btn" title="Volver a elegir modalidad">← Volver</button>
                 <button id="btnRun" class="btn">Simular</button>
                 <button id="btnCsv" class="btn" title="Exportar CSV de las corridas guardadas">Exportar CSV</button>
                 <button id="btnClear" class="btn" title="Borrar histórico local">Borrar histórico</button>
@@ -255,173 +64,7 @@
         </div>
     </div>
 
-    <script>
-        // Utilidades
-        const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-        const pick = (n) => Math.floor(Math.random() * n);
 
-        // Probabilidades teóricas
-        const THEORETICAL = {
-            one_die: 1 - Math.pow(5 / 6, 4),
-            two_dice: 1 - Math.pow(35 / 36, 24)
-        };
-
-        // Simulaciones
-        function simularJuegoUno() {
-            const lanzamientos = 4, tiradas = []; let exitos = 0;
-            for (let i = 0; i < lanzamientos; i++) { const v = 1 + pick(6); tiradas.push({ roll: i + 1, value: v }); if (v === 6) exitos++; }
-            return { game: 'one_die', n_lanzamientos: lanzamientos, tiradas, exitos, ocurrio: (exitos > 0) };
-        }
-        function simularJuegoDos() {
-            const lanzamientos = 24, tiradas = []; let exitos = 0;
-            for (let i = 0; i < lanzamientos; i++) { const d1 = 1 + pick(6), d2 = 1 + pick(6); tiradas.push({ roll: i + 1, d1, d2 }); if (d1 === 6 && d2 === 6) exitos++; }
-            return { game: 'two_dice', n_lanzamientos: lanzamientos, tiradas, exitos, ocurrio: (exitos > 0) };
-        }
-
-        // Dados (DOM) comentario prueba de firma
-        function makeDie() {
-            const die = document.createElement('div'); die.className = 'die';
-            const p = document.createElement('div'); p.className = 'pips';
-            const cells = []; for (let i = 0; i < 9; i++) { const dot = document.createElement('div'); dot.className = 'pip'; p.appendChild(dot); cells.push(dot); }
-            die.appendChild(p); return { el: die, cells };
-        }
-        const FACE_MAP = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
-        function renderFace(die, value) { die.cells.forEach((c, idx) => c.classList.toggle('on', FACE_MAP[value].includes(idx))); }
-        async function animateToValue(die, finalValue, duration = 520) {
-            die.el.classList.add('anim'); const frames = 4 + pick(3); const start = performance.now();
-            for (let i = 0; i < frames; i++) { renderFace(die, 1 + pick(6)); const t = performance.now() - start; const left = Math.max(0, duration - t); await sleep(Math.max(60, left / (frames - i + 0.5))); }
-            renderFace(die, finalValue); await sleep(60); die.el.classList.remove('anim');
-        }
-
-        // DOM
-        const diceZone = document.getElementById('diceZone');
-        const rollsOut = document.getElementById('rollsOut');
-        const kpis = document.getElementById('kpis');
-        const btnRun = document.getElementById('btnRun');
-        const btnCsv = document.getElementById('btnCsv');
-        const btnClear = document.getElementById('btnClear');
-        const statusEl = document.getElementById('status');
-
-        // === Persistencia local ===
-        const STORAGE_KEY = 'demere_runs_v1';
-        const runs = []; // {trial_id, game, timestamp, n_lanzamientos, exitos, ocurrio, detalles_json}
-
-        function setStatus(msg) { statusEl.textContent = msg || ''; }
-
-        function loadRuns() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) {
-                    const arr = JSON.parse(saved);
-                    if (Array.isArray(arr)) runs.push(...arr);
-                    setStatus(`Histórico cargado: ${runs.length} corridas.`);
-                }
-            } catch (e) { console.warn('No se pudo cargar histórico:', e); }
-        }
-        function saveRuns() {
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(runs)); }
-            catch (e) { console.warn('No se pudo guardar histórico:', e); }
-        }
-        function appendRun(result) {
-            const trial_id = runs.length + 1;
-            const detalles_json = JSON.stringify(result.tiradas);
-            runs.push({
-                trial_id,
-                game: result.game,
-                timestamp: new Date().toISOString(),
-                n_lanzamientos: result.n_lanzamientos,
-                exitos: result.exitos,
-                ocurrio: Number(result.ocurrio),
-                detalles_json
-            });
-            saveRuns();
-        }
-
-        // CSV
-        function toCSV(rows) {
-            const header = ['trial_id', 'game', 'timestamp', 'n_lanzamientos', 'exitos', 'ocurrio', 'detalles_json'];
-            const body = rows.map(r => [
-                r.trial_id, r.game, r.timestamp, r.n_lanzamientos, r.exitos, r.ocurrio,
-                '"' + String(r.detalles_json).replaceAll('"', '""') + '"'
-            ].join(','));
-            return [header.join(','), ...body].join('\n');
-        }
-        function downloadCSV(filename, csvText) {
-            const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = filename; a.style.display = 'none';
-            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-        }
-
-        function getSelectedGame() { const r = document.querySelector('input[name="game"]:checked'); return r ? r.value : 'one_die'; }
-
-        function renderKPIs(result) {
-            const teor = THEORETICAL[result.game];
-            const etiqueta = result.ocurrio ? `<span class="tag ok">¡Ocurrió al menos uno!</span>` : `<span class="tag bad">No ocurrió</span>`;
-            kpis.innerHTML = `
-        <div class="kpi">Teórica<b>${teor.toFixed(4)}</b></div>
-        <div class="kpi">Éxitos<b>${result.exitos}</b></div>
-        <div class="kpi">Estado<b>${etiqueta}</b></div>
-        <div class="kpi">Lanzamientos<b>${result.n_lanzamientos}</b></div>
-      `;
-        }
-        function printRollsText(result) {
-            const lines = (result.game === 'one_die')
-                ? result.tiradas.map(t => `#${t.roll}: ${t.value}`)
-                : result.tiradas.map(t => `#${t.roll}: (${t.d1}, ${t.d2})`);
-            rollsOut.textContent = lines.join('\n');
-        }
-
-        async function runOnce() {
-            btnRun.disabled = true; setStatus('Rodando dados…');
-            rollsOut.textContent = ''; kpis.innerHTML = ''; diceZone.innerHTML = '';
-
-            const game = getSelectedGame();
-            const result = (game === 'one_die') ? simularJuegoUno() : simularJuegoDos();
-
-            if (game === 'one_die') {
-                for (const t of result.tiradas) {
-                    const cell = document.createElement('div');
-                    const die = makeDie();
-                    const label = document.createElement('div');
-                    label.style.marginTop = '6px'; label.style.textAlign = 'center'; label.style.color = 'var(--muted)'; label.style.fontSize = '12px';
-                    label.textContent = `Tirada ${t.roll}`;
-                    cell.appendChild(die.el); cell.appendChild(label); diceZone.appendChild(cell);
-                    await animateToValue(die, t.value);
-                }
-            } else {
-                for (const t of result.tiradas) {
-                    const cell = document.createElement('div');
-                    const pair = document.createElement('div'); pair.style.display = 'grid'; pair.style.gap = '10px';
-                    const d1 = makeDie(), d2 = makeDie(); pair.appendChild(d1.el); pair.appendChild(d2.el);
-                    const label = document.createElement('div');
-                    label.style.marginTop = '6px'; label.style.textAlign = 'center'; label.style.color = 'var(--muted)'; label.style.fontSize = '12px';
-                    label.textContent = `Tirada ${t.roll}`;
-                    cell.appendChild(pair); cell.appendChild(label); diceZone.appendChild(cell);
-                    await Promise.all([animateToValue(d1, t.d1), animateToValue(d2, t.d2)]);
-                }
-            }
-
-            renderKPIs(result);
-            printRollsText(result);
-            appendRun(result);
-            setStatus(`Listo. Corridas guardadas: ${runs.length}`);
-            btnRun.disabled = false;
-        }
-
-        // Listeners
-        btnRun.addEventListener('click', () => runOnce());
-        btnCsv.addEventListener('click', () => {
-            if (!runs.length) { setStatus('No hay corridas guardadas. Ejecuta una simulación.'); return; }
-            const csv = toCSV(runs); downloadCSV('demere_results.csv', csv); setStatus('CSV exportado.');
-        });
-        btnClear.addEventListener('click', () => {
-            runs.length = 0; saveRuns(); localStorage.removeItem(STORAGE_KEY); setStatus('Histórico borrado.');
-        });
-
-        // Inicializar
-        loadRuns();
-    </script>
 </body>
 
 </html>
